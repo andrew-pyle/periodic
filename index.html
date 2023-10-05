@@ -1,12 +1,47 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Svelte + TS</title>
+    <link rel="stylesheet" href="formation.css" />
+    <script type="module">
+      document.addEventListener("DOMContentLoaded", () => {
+        // Set Initial
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? setThemeMode("dark")
+          : setThemeMode("light");
+
+        // Watch for Changes
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", (event) =>
+            setThemeMode(event.matches ? "dark" : "light")
+          );
+      });
+
+      /**
+       * Set the Theme of the page: Light Mode or Dark Mode
+       * @param {'dark'|'light'} darkMode - Whether the theme should be
+       * set to Dark Mode or not (therefore set to Light Mode)
+       */
+      function setThemeMode(mode) {
+        if (mode === "dark") {
+          document.body.classList.remove("theme-light");
+          document.body.classList.add("theme-dark");
+        } else if (mode === "light") {
+          document.body.classList.remove("theme-dark");
+          document.body.classList.add("theme-light");
+        } else {
+          console.error(
+            `Attempted to set Theme Mode but received unexpected mode selection: '${mode}'. Accepted Modes are 'light' and 'dark'.`
+          );
+        }
+      }
+    </script>
   </head>
-  <body>
+  <body class="theme">
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

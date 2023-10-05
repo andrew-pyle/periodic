@@ -1,5 +1,8 @@
 <script lang="ts">
   import type { FormEventHandler } from "svelte/elements";
+  import Input from "./lib/Input.svelte";
+  import Label from "./lib/Label.svelte";
+  import Select from "./lib/Select.svelte";
 
   interface Task {
     id: ReturnType<typeof id>;
@@ -92,11 +95,12 @@
   }
 </script>
 
-<main>
-  <h1>Done Stuff</h1>
+<div class="container">
+  <main>
+    <h1>Done Stuff</h1>
 
-  <!-- Update -->
-  <section>
+    <!-- Update -->
+
     <table>
       <thead>
         <tr>
@@ -119,46 +123,52 @@
             >
             <td>{period}</td>
             <td
-              ><button type="button" on:click={() => completeActivity(id)}
-                >Done</button
+              ><button
+                type="button"
+                on:click={() => completeActivity(id)}
+                class="button button-intent--primary">Done</button
               ></td
             >
           </tr>
         {/each}
       </tbody>
     </table>
-  </section>
 
-  <!-- Create -->
-  <hr />
-  {#if createMode}
-    <section>
+    <!-- Create -->
+    <hr />
+    {#if createMode}
+      <h2>Create a New Task</h2>
       <form class="create-form" on:submit|preventDefault={onSubmit}>
-        <label for="create-activity"
-          >Create a New Activity
-          <input
-            type="text"
+        <div class="label-group">
+          <Label htmlFor="create-activity">Task Name</Label>
+          <Input
             id="create-activity"
             name="create-activity"
             placeholder="Sweep the Floor"
           />
-        </label>
+        </div>
 
-        <label for="create-activity-period"
-          >Period
-          <select name="create-activity-period" id="create-activity-period">
+        <div class="label-group">
+          <Label htmlFor="create-activity-period">Period</Label>
+          <Select name="create-activity-period" id="create-activity-period">
             <option value="hour">Hour</option>
             <option value="day">Day</option>
             <option value="week">Week</option>
             <option value="month">Moth</option>
             <option value="year">Year</option>
-          </select>
-        </label>
-        <button type="submit">Create Activity</button>
+          </Select>
+        </div>
+        <button type="submit" class="button button-intent--primary"
+          >Create Task</button
+        >
       </form>
-    </section>
-  {/if}
-</main>
+    {/if}
+  </main>
+  <footer>
+    Made with <a href="https://svelte.dev">Svelte</a> &
+    <a href="https://formation.fyi">Formation</a>
+  </footer>
+</div>
 
 <style>
   :root {
@@ -170,26 +180,18 @@
     --color-overdue: currentColor;
   }
 
-  h1 {
-    text-align: center;
-  }
-
-  label {
-    display: block;
-    font-size: 0.9em;
+  main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 1080px;
+    margin: 0 auto;
+    margin-bottom: 3em;
+    padding: 8px;
   }
 
   hr {
     margin: 1em 0;
-  }
-
-  input[type="text"],
-  select {
-    display: block;
-    padding: 0.6em;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
   }
 
   .current {
@@ -209,7 +211,34 @@
 
   .create-form {
     display: flex;
-    column-gap: 10px;
-    align-items: end;
+    gap: 10px;
+    flex-direction: column;
+    justify-content: start;
+  }
+  @media screen and (min-width: 450px) {
+    .create-form {
+      flex-direction: row;
+      justify-content: center;
+      align-items: end;
+    }
+  }
+
+  /* .label-group {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    align-items: baseline;
+  } */
+  .label-group {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    align-items: baseline;
+  }
+  @media screen and (min-width: 450px) {
+    .label-group {
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+    }
   }
 </style>
