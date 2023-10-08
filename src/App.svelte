@@ -3,20 +3,9 @@
   import Input from "./lib/Input.svelte";
   import Label from "./lib/Label.svelte";
   import Select from "./lib/Select.svelte";
-
-  interface Task {
-    id: ReturnType<typeof id>;
-    name: string;
-    lastCompleted: null | number; // millisecond time
-    period: "hour" | "day" | "week" | "month" | "year";
-  }
-
-  const lastCompletedFormatter = new Intl.DateTimeFormat(
-    Intl.DateTimeFormat().resolvedOptions().locale,
-    {
-      dateStyle: "short",
-    }
-  );
+  import TaskTable from "./lib/TaskTable.svelte";
+  import type { Task } from "./lib/types";
+  import { completeActivity, id } from "./lib/utils";
 
   let createMode = true;
 
@@ -52,13 +41,6 @@
   ]);
 
   /**
-   * Create a new Task ID
-   */
-  function id() {
-    return crypto.randomUUID();
-  }
-
-  /**
    * Create a new Task from a 'Create Task' <form>
    */
   const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
@@ -80,18 +62,10 @@
     activities = activities.set(id(), newActivity);
   };
 
-  /**
-   * Set the Task with the provided ID to have lastCompleted of now.
-   */
-  function completeActivity(id: Task["id"]) {
-    const old = activities.get(id);
-    if (!old) {
-      throw new Error(
-        `Cannot update Task with ID=${id} because it cannot be found in Task list.`
-      );
-    }
-    const complete = { ...old, lastCompleted: new Date().valueOf() };
-    activities = activities.set(id, complete);
+  function completeTask(id: Task["id"]) {
+    // Mutate & Update State
+    const newTasksMap = completeActivity(activities, id);
+    activities = newTasksMap;
   }
 </script>
 
@@ -101,38 +75,7 @@
 
     <!-- Update -->
 
-    <table>
-      <thead>
-        <tr>
-          <th>Task</th>
-          <th>Last Completed</th>
-          <th>How Often</th>
-          <th>I Did It</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each activities as [id, { name, lastCompleted, period }]}
-          <tr class="current">
-            <td>{name}</td>
-            <td
-              ><time
-                >{lastCompleted
-                  ? lastCompletedFormatter.format(lastCompleted)
-                  : "Never"}</time
-              ></td
-            >
-            <td>{period}</td>
-            <td
-              ><button
-                type="button"
-                on:click={() => completeActivity(id)}
-                class="button button-intent--primary">Done</button
-              ></td
-            >
-          </tr>
-        {/each}
-      </tbody>
-    </table>
+    <TaskTable tasks={activities.values()} onComplete={completeTask} />
 
     <!-- Create -->
     <hr />
@@ -184,7 +127,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 1080px;
+    max-width: 700px;
     margin: 0 auto;
     margin-bottom: 3em;
     padding: 8px;
