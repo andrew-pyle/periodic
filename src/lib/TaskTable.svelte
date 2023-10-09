@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Task } from "./types";
+  import type { TaskT } from "./types";
   import { lastCompletedFormatter } from "./utils";
 
-  export let tasks: Iterable<Task>;
-  export let onComplete: (id: Task["id"]) => void;
+  export let tasks: Iterable<TaskT>;
+  export let onComplete: (id: TaskT["id"]) => void;
 </script>
 
 <table>

@@ -1,6 +1,10 @@
+/* Page Layout */
+
 body {
   margin: 0;
 }
+
+/* Changes to Formation */
 
 .theme-light .input:focus,
 .theme-light .input:focus-within,
@@ -34,4 +38,19 @@ body {
 .theme-dark .select:focus,
 .theme-dark .select:focus-within {
   background-color: #111418;
+}
+
+/* Utility Classes */
+
+:root {
+  --color-text-muted: #738091; /* Same as Formation ::placeholder */
+}
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --color-text-muted: #abb3bf; /* Same as Formation ::placeholder */
+  }
+}
+
+.muted {
+  color: var(--color-text-muted);
 }

@@ -1,4 +1,4 @@
-import type { Task } from "./types";
+import type { TaskT } from "./types";
 
 /**
  * Create a new Task ID
@@ -22,7 +22,10 @@ export const lastCompletedFormatter = new Intl.DateTimeFormat(
  * to have lastCompleted of now.
  * @throws {Error} - If no entry in the Map for the provided ID, throws Error.
  */
-export function completeActivity(tasks: Map<Task["id"], Task>, id: Task["id"]) {
+export function completeActivity(
+	tasks: Map<TaskT["id"], TaskT>,
+	id: TaskT["id"],
+) {
 	const old = tasks.get(id);
 	if (!old) {
 		throw new Error(

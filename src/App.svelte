@@ -3,14 +3,14 @@
   import Input from "./lib/Input.svelte";
   import Label from "./lib/Label.svelte";
   import Select from "./lib/Select.svelte";
-  import TaskTable from "./lib/TaskTable.svelte";
-  import type { Task } from "./lib/types";
+  import Task from "./lib/Task.svelte";
+  import type { TaskT } from "./lib/types";
   import { completeActivity, id } from "./lib/utils";
 
   let createMode = true;
 
   const [id1, id2, id3] = [id(), id(), id()];
-  let activities = new Map<Task["id"], Task>([
+  let activities: Map<TaskT["id"], TaskT> = new Map([
     [
       id1,
       {
@@ -74,8 +74,19 @@
     <h1>Done Stuff</h1>
 
     <!-- Update -->
+    <!-- 
+    <h2>Table</h2>
+    <TaskTable tasks={activities.values()} onComplete={completeTask} /> -->
 
-    <TaskTable tasks={activities.values()} onComplete={completeTask} />
+    <!-- OR -->
+    <!-- <h2>List</h2> -->
+    <ul class="no-bullet">
+      {#each activities.values() as task}
+        <li>
+          <Task {task} onComplete={completeTask} />
+        </li>
+      {/each}
+    </ul>
 
     <!-- Create -->
     <hr />
@@ -183,5 +194,11 @@
       gap: 10px;
       flex-direction: column;
     }
+  }
+
+  /* Utility Classes */
+  .no-bullet {
+    padding: 0;
+    list-style-type: none;
   }
 </style>
