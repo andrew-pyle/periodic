@@ -5,7 +5,7 @@
   import Select from "./lib/Select.svelte";
   import Task from "./lib/Task.svelte";
   import type { TaskT } from "./lib/types";
-  import { completeActivity, id } from "./lib/utils";
+  import { completeActivity, id, sortByStatus } from "./lib/utils";
 
   let createMode = true;
 
@@ -18,6 +18,7 @@
         name: "Sweep the Kitchen",
         lastCompleted: new Date(2023, 9, 10).valueOf(),
         period: "week",
+        status: "did-today",
       },
     ],
     [
@@ -27,6 +28,7 @@
         name: "Vacuum the Kitchen",
         lastCompleted: new Date(2023, 8, 10).valueOf(),
         period: "week",
+        status: "up-to-date",
       },
     ],
     [
@@ -36,9 +38,13 @@
         name: "Dust the TV",
         lastCompleted: null,
         period: "week",
+        status: "did-today",
       },
     ],
   ]);
+
+  // Todo create computed `status` from current date and lastCompleted date
+  $: tasks = activities; // todo ...
 
   /**
    * Create a new Task from a 'Create Task' <form>
@@ -80,9 +86,10 @@
   <!-- OR -->
   <!-- <h2>List</h2> -->
   <ul class="no-bullet">
-    {#each activities.values() as task}
+    <!-- Todo use computed status from current date and lastCompleted date -->
+    {#each [...tasks.values()].sort(sortByStatus) as task}
       <li>
-        <Task {task} onComplete={completeTask} status="almost-due" />
+        <Task {task} onComplete={completeTask} status={task.status} />
       </li>
     {/each}
   </ul>

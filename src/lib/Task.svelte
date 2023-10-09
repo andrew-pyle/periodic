@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { TaskStatus, TaskT } from "./types";
+  import type { TaskStatusT, TaskT } from "./types";
   import { lastCompletedFormatter } from "./utils";
 
   export let task: TaskT;
-  export let status: TaskStatus;
+  export let status: TaskStatusT;
   export let onComplete: (id: TaskT["id"]) => void;
 
   // Possible Statuses of the Task
-  const statusMap: { [T in TaskStatus]: string } = {
+  const statusMap: { [T in TaskStatusT]: string } = {
     "did-today": "success",
     "up-to-date": "blank",
     "almost-due": "warning",

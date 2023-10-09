@@ -4,3 +4,5 @@ export interface TaskT {
 	lastCompleted: null | number; // millisecond time
 	period: "hour" | "day" | "week" | "month" | "year";
 }
+
+export type TaskStatusT = "did-today" | "up-to-date" | "almost-due" | "overdue";

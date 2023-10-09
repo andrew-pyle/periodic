@@ -1,4 +1,4 @@
-import type { TaskT } from "./types";
+import type { TaskStatusT, TaskT } from "./types";
 
 /**
  * Create a new Task ID
@@ -34,4 +34,16 @@ export function completeActivity(
 	}
 	const complete = { ...old, lastCompleted: new Date().valueOf() };
 	return tasks.set(id, complete);
+}
+
+export function sortByStatus(
+	a: { status: TaskStatusT },
+	b: { status: TaskStatusT },
+) {
+	if (a.status === "did-today") {
+		return -1;
+	} else {
+		// TODO
+		return 1;
+	}
 }
