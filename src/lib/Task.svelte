@@ -11,11 +11,14 @@
 
 <div class="card task">
   <h2 class="title">{task.name}</h2>
-  <p>
-    <span class="muted">Last Completed:</span>
-    {lastCompletedFormatter.format(task.lastCompleted ?? undefined)}
+  <p class="key-value">
+    <span class="muted">Last&nbsp;Completed</span>
+    <span>{lastCompletedFormatter.format(task.lastCompleted ?? undefined)}</span
+    >
   </p>
-  <p><span class="muted">Due Every</span> {task.period}</p>
+  <p class="key-value">
+    <span class="muted">Due&nbsp;Every</span><span>{task.period}</span>
+  </p>
   <button
     type="button"
     on:click={() => onComplete(task.id)}
@@ -26,9 +29,24 @@
 <style>
   .task {
     display: grid;
+    grid-template-columns: 1fr 1fr minmax(10%, 0.75fr);
     grid-template-areas:
       "title title button"
       ".     .     button";
+    column-gap: 10px;
+    /* Reset */
+    width: unset;
+  }
+  /* Only the narrowest screens */
+  @media screen and (max-width: 350px) {
+    .task {
+      grid-template-columns: 1fr minmax(10%, 0.75fr);
+      grid-template-areas:
+        "title title"
+        ".     button"
+        ".     button";
+      row-gap: 10px;
+    }
   }
 
   .title {
@@ -37,6 +55,18 @@
 
   .thumb-button {
     grid-area: button;
-    margin-left: 0.755em;
+    align-self: center;
+    min-height: 60px;
+  }
+
+  .key-value {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  @media screen and (min-width: 525px) {
+    .key-value {
+      flex-direction: row;
+    }
   }
 </style>

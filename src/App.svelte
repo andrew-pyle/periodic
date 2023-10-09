@@ -69,29 +69,29 @@
   }
 </script>
 
-<div class="container">
-  <main>
-    <h1>Done Stuff</h1>
+<main>
+  <h1>Done Stuff</h1>
 
-    <!-- Update -->
-    <!-- 
+  <!-- Update -->
+  <!-- 
     <h2>Table</h2>
     <TaskTable tasks={activities.values()} onComplete={completeTask} /> -->
 
-    <!-- OR -->
-    <!-- <h2>List</h2> -->
-    <ul class="no-bullet">
-      {#each activities.values() as task}
-        <li>
-          <Task {task} onComplete={completeTask} />
-        </li>
-      {/each}
-    </ul>
+  <!-- OR -->
+  <!-- <h2>List</h2> -->
+  <ul class="no-bullet">
+    {#each activities.values() as task}
+      <li>
+        <Task {task} onComplete={completeTask} />
+      </li>
+    {/each}
+  </ul>
 
-    <!-- Create -->
-    <hr />
-    {#if createMode}
-      <h2>Create a New Task</h2>
+  <!-- Create -->
+  <hr />
+  {#if createMode}
+    <h2>Create a New Task</h2>
+    <div class="form-container">
       <form class="create-form" on:submit|preventDefault={onSubmit}>
         <div class="label-group">
           <Label htmlFor="create-activity">Task Name</Label>
@@ -101,7 +101,6 @@
             placeholder="Sweep the Floor"
           />
         </div>
-
         <div class="label-group">
           <Label htmlFor="create-activity-period">Period</Label>
           <Select name="create-activity-period" id="create-activity-period">
@@ -116,13 +115,13 @@
           >Create Task</button
         >
       </form>
-    {/if}
-  </main>
-  <footer>
-    Made with <a href="https://svelte.dev">Svelte</a> &
-    <a href="https://formation.fyi">Formation</a>
-  </footer>
-</div>
+    </div>
+  {/if}
+</main>
+<footer>
+  Made with <a href="https://svelte.dev">Svelte</a> &
+  <a href="https://formation.fyi">Formation</a>
+</footer>
 
 <style>
   :root {
@@ -163,6 +162,10 @@
     background: var(--color-bkg-overdue);
   }
 
+  .form-container {
+    margin: 0 30px;
+  }
+
   .create-form {
     display: flex;
     gap: 10px;
@@ -177,14 +180,9 @@
     }
   }
 
-  /* .label-group {
-    display: flex;
-    gap: 10px;
-    flex-direction: row;
-    align-items: baseline;
-  } */
   .label-group {
     display: grid;
+    gap: 10px;
     grid-template-columns: 1fr 3fr;
     align-items: baseline;
   }
