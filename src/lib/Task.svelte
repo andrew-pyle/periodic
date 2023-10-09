@@ -1,15 +1,21 @@
-<!--  TODO View is breaking out horizontally at 375px width -->
-<!--  TODO Use Formation intent colors or Callout colors for background color of Task.-->
-
 <script lang="ts">
-  import type { TaskT } from "./types";
+  import type { TaskStatus, TaskT } from "./types";
   import { lastCompletedFormatter } from "./utils";
 
   export let task: TaskT;
+  export let status: TaskStatus;
   export let onComplete: (id: TaskT["id"]) => void;
+
+  // Possible Statuses of the Task
+  const statusMap: { [T in TaskStatus]: string } = {
+    "did-today": "success",
+    "up-to-date": "blank",
+    "almost-due": "warning",
+    overdue: "danger",
+  };
 </script>
 
-<div class="card task">
+<div class={`card task color--intent-${statusMap[status]}`}>
   <h2 class="title">{task.name}</h2>
   <p class="key-value">
     <span class="muted">Last&nbsp;Completed</span>

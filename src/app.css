@@ -85,3 +85,20 @@ body {
 .muted {
   color: var(--color-text-muted);
 }
+
+/* .color--intent-blank is used, but needs no styles*/
+
+.color--intent-success {
+  background-color: #165a36 !important;
+  border-color: #32a467 !important;
+}
+
+.color--intent-warning {
+  background-color: #77450d !important;
+  border-color: #ec9a3c !important;
+}
+
+.color--intent-danger {
+  background-color: #8e292c !important;
+  border-color: #e76a6e !important;
+}

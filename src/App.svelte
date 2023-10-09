@@ -82,7 +82,7 @@
   <ul class="no-bullet">
     {#each activities.values() as task}
       <li>
-        <Task {task} onComplete={completeTask} />
+        <Task {task} onComplete={completeTask} status="almost-due" />
       </li>
     {/each}
   </ul>
