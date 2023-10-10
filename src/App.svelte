@@ -5,20 +5,19 @@
   import Select from "./lib/Select.svelte";
   import Task from "./lib/Task.svelte";
   import type { TaskT } from "./lib/types";
-  import { completeActivity, id, sortByStatus } from "./lib/utils";
+  import { completeActivity, determineTaskStatus, id } from "./lib/utils";
 
   let createMode = true;
 
-  const [id1, id2, id3] = [id(), id(), id()];
+  const [id1, id2, id3, id4] = [id(), id(), id(), id()];
   let activities: Map<TaskT["id"], TaskT> = new Map([
     [
       id1,
       {
         id: id1,
         name: "Sweep the Kitchen",
-        lastCompleted: new Date(2023, 9, 10).valueOf(),
+        lastCompleted: new Date(2023, 9, 3).valueOf(),
         period: "week",
-        status: "did-today",
       },
     ],
     [
@@ -26,9 +25,8 @@
       {
         id: id2,
         name: "Vacuum the Kitchen",
-        lastCompleted: new Date(2023, 8, 10).valueOf(),
-        period: "week",
-        status: "up-to-date",
+        lastCompleted: new Date(2023, 8, 9).valueOf(),
+        period: "month",
       },
     ],
     [
@@ -38,13 +36,18 @@
         name: "Dust the TV",
         lastCompleted: null,
         period: "week",
-        status: "did-today",
+      },
+    ],
+    [
+      id4,
+      {
+        id: id4,
+        name: "Mop Entryway",
+        lastCompleted: new Date(2023, 9, 4).valueOf(),
+        period: "week",
       },
     ],
   ]);
-
-  // Todo create computed `status` from current date and lastCompleted date
-  $: tasks = activities; // todo ...
 
   /**
    * Create a new Task from a 'Create Task' <form>
@@ -57,7 +60,7 @@
     const period = formData.get("create-activity-period") as Task["period"];
 
     // Create New Activity
-    const newActivity = {
+    const newActivity: TaskT = {
       id: id(),
       name,
       lastCompleted: null,
@@ -73,8 +76,13 @@
     const newTasksMap = completeActivity(activities, id);
     activities = newTasksMap;
   }
+
+  $: sortedByLastCompleted = [...activities.values()].sort(
+    (a, b) => (a.lastCompleted ?? 0) - (b.lastCompleted ?? 0)
+  );
 </script>
 
+<!-- Todo: Filters for statuses -->
 <main>
   <h1>Done Stuff</h1>
 
@@ -87,9 +95,13 @@
   <!-- <h2>List</h2> -->
   <ul class="no-bullet">
     <!-- Todo use computed status from current date and lastCompleted date -->
-    {#each [...tasks.values()].sort(sortByStatus) as task}
+    {#each sortedByLastCompleted as task}
       <li>
-        <Task {task} onComplete={completeTask} status={task.status} />
+        <Task
+          {task}
+          onComplete={completeTask}
+          status={determineTaskStatus(task)}
+        />
       </li>
     {/each}
   </ul>

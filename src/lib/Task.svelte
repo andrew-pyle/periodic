@@ -19,7 +19,10 @@
   <h2 class="title">{task.name}</h2>
   <p class="key-value">
     <span class="muted">Last&nbsp;Completed</span>
-    <span>{lastCompletedFormatter.format(task.lastCompleted ?? undefined)}</span
+    <span
+      >{task.lastCompleted
+        ? lastCompletedFormatter.format(task.lastCompleted)
+        : "Never"}</span
     >
   </p>
   <p class="key-value">
