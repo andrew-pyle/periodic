@@ -22,6 +22,7 @@
 		"vite": "^5.0.0-beta.4"
 	},
 	"dependencies": {
-		"@joshdschneider/formation": "^1.0.2"
+		"@joshdschneider/formation": "^1.0.2",
+		"date-fns": "^2.30.0"
 	}
 }
