@@ -4,7 +4,10 @@
 
   export let task: TaskT;
   export let status: TaskStatusT;
+  export let editMode: boolean;
   export let onComplete: (id: TaskT["id"]) => void;
+  export let onDelete: (id: TaskT["id"]) => void;
+  export let onEdit: (task: TaskT) => void;
 
   // Possible Statuses of the Task
   const statusMap: { [T in TaskStatusT]: string } = {
@@ -16,7 +19,17 @@
 </script>
 
 <div class={`card task color--intent-${statusMap[status]}`}>
-  <h2 class="title">{task.name}</h2>
+  <!-- Title -->
+  <h2
+    class="title"
+    contenteditable={editMode}
+    on:input={(event) =>
+      onEdit({ ...task, name: event.currentTarget.textContent ?? "" })}
+  >
+    {task.name}
+  </h2>
+
+  <!-- Metadata: Last Completed -->
   <p class="key-value">
     <span class="muted">Last&nbsp;Completed</span>
     <span
@@ -25,14 +38,42 @@
         : "Never"}</span
     >
   </p>
+
+  <!-- Metadata: Period -->
   <p class="key-value">
-    <span class="muted">Due&nbsp;Every</span><span>{task.period}</span>
+    <span class="muted">Due&nbsp;Every</span>
+    {#if editMode}
+      <select
+        class="edit-period"
+        value={task.period}
+        on:input={(event) =>
+          onEdit({ ...task, period: event.currentTarget.value })}
+      >
+        <option value="hour">Hour</option>
+        <option value="day">Day</option>
+        <option value="week">Week</option>
+        <option value="month">Month</option>
+        <option value="year">Year</option>
+      </select>
+    {:else}
+      <span class="period">{task.period}</span>
+    {/if}
   </p>
-  <button
-    type="button"
-    on:click={() => onComplete(task.id)}
-    class="button button-intent--primary thumb-button">Done</button
-  >
+
+  <!-- Button -->
+  {#if editMode}
+    <button
+      type="button"
+      on:click={() => onDelete(task.id)}
+      class="button button-intent--danger thumb-button">Delete</button
+    >
+  {:else}
+    <button
+      type="button"
+      on:click={() => onComplete(task.id)}
+      class="button button-intent--primary thumb-button">Done</button
+    >
+  {/if}
 </div>
 
 <style>
@@ -62,6 +103,11 @@
     grid-area: title;
   }
 
+  .title[contenteditable="true"] {
+    outline: 1px solid currentColor;
+    border-radius: 2px;
+  }
+
   .thumb-button {
     grid-area: button;
     align-self: center;
@@ -77,5 +123,16 @@
     .key-value {
       flex-direction: row;
     }
+  }
+
+  .period {
+    text-transform: capitalize;
+  }
+
+  .edit-period {
+    font: inherit;
+    background: transparent;
+    color: inherit;
+    border: 0;
   }
 </style>

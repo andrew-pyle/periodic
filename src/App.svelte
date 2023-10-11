@@ -1,3 +1,5 @@
+<!-- TODO: Light mode status colors look bad! -->
+
 <script lang="ts">
   import {
     createIndexedDBStorage,
@@ -6,6 +8,7 @@
   import { onMount } from "svelte";
   import type { FormEventHandler } from "svelte/elements";
   import { writable } from "svelte/store";
+  import Checkbox from "./lib/Checkbox.svelte";
   import Input from "./lib/Input.svelte";
   import Label from "./lib/Label.svelte";
   import Select from "./lib/Select.svelte";
@@ -21,7 +24,7 @@
 
   // Types
 
-  let createMode = true;
+  let editMode = false;
 
   let tasks = persist(
     writable<TaskStore>(new Map()),
@@ -71,6 +74,28 @@
     $tasks = newTasksMap;
   }
 
+  /**
+   * TODO: Delete doesn't work. Maybe IDs aren't stable?
+   */
+  function deleteTask(id: TaskT["id"]) {
+    // Delete ID from Task Map
+    const somethingDeleted = $tasks.delete(id);
+
+    // Only re-render if something was really deleted
+    if (somethingDeleted) {
+      $tasks = $tasks;
+    }
+  }
+
+  /**
+   * TODO: Doesn't work. Sometimes clones existing items.
+   * Maybe IDs aren't stable?
+   */
+  function editTask(task: TaskT) {
+    console.log(task);
+    $tasks = $tasks.set(task.id, task);
+  }
+
   $: sortedByLastCompleted = [...$tasks.values()].sort(
     (a, b) => (a.lastCompleted ?? 0) - (b.lastCompleted ?? 0)
   );
@@ -79,57 +104,54 @@
 <!-- Todo: Filters for statuses -->
 <main>
   <h1>Done Stuff</h1>
-
-  <!-- Update -->
-  <!-- 
-    <h2>Table</h2>
-    <TaskTable tasks={activities.values()} onComplete={completeTask} /> -->
-
-  <!-- OR -->
-  <!-- <h2>List</h2> -->
   <ul class="no-bullet">
-    <!-- Todo use computed status from current date and lastCompleted date -->
     {#each sortedByLastCompleted as task}
       <li>
         <Task
           {task}
-          onComplete={completeTask}
           status={determineTaskStatus(task)}
+          onComplete={completeTask}
+          onDelete={deleteTask}
+          onEdit={editTask}
+          {editMode}
         />
       </li>
     {/each}
   </ul>
 
+  <!-- Edit Mode -->
+  <div class="edit-mode-container">
+    <Checkbox bind:checked={editMode}>Edit Mode</Checkbox>
+  </div>
+
   <!-- Create -->
   <hr />
-  {#if createMode}
-    <h2>Create a New Task</h2>
-    <div class="form-container">
-      <form class="create-form" on:submit|preventDefault={onSubmit}>
-        <div class="label-group">
-          <Label htmlFor="create-activity">Task Name</Label>
-          <Input
-            id="create-activity"
-            name="create-activity"
-            placeholder="Sweep the Floor"
-          />
-        </div>
-        <div class="label-group">
-          <Label htmlFor="create-activity-period">Period</Label>
-          <Select name="create-activity-period" id="create-activity-period">
-            <option value="hour">Hour</option>
-            <option value="day">Day</option>
-            <option value="week">Week</option>
-            <option value="month">Month</option>
-            <option value="year">Year</option>
-          </Select>
-        </div>
-        <button type="submit" class="button button-intent--primary"
-          >Create Task</button
-        >
-      </form>
-    </div>
-  {/if}
+  <h2>Create a New Task</h2>
+  <div class="form-container">
+    <form class="create-form" on:submit|preventDefault={onSubmit}>
+      <div class="label-group">
+        <Label htmlFor="create-activity">Task Name</Label>
+        <Input
+          id="create-activity"
+          name="create-activity"
+          placeholder="Sweep the Floor"
+        />
+      </div>
+      <div class="label-group">
+        <Label htmlFor="create-activity-period">Period</Label>
+        <Select name="create-activity-period" id="create-activity-period">
+          <option value="hour">Hour</option>
+          <option value="day">Day</option>
+          <option value="week">Week</option>
+          <option value="month">Month</option>
+          <option value="year">Year</option>
+        </Select>
+      </div>
+      <button type="submit" class="button button-intent--primary"
+        >Create Task</button
+      >
+    </form>
+  </div>
 </main>
 <footer>
   Made with <a href="https://svelte.dev">Svelte</a> &
@@ -158,21 +180,6 @@
 
   hr {
     margin: 1em 0;
-  }
-
-  .current {
-    color: var(--color-current);
-    background: var(--color-bkg-current);
-  }
-
-  .due {
-    /* background: var(--color-due); */
-    color: var(--color-bkg-due);
-  }
-
-  .overdue {
-    color: var(--color-overdue);
-    background: var(--color-bkg-overdue);
   }
 
   .form-container {
@@ -207,9 +214,20 @@
     }
   }
 
+  .edit-mode-container {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0 25px;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
   /* Utility Classes */
   .no-bullet {
     padding: 0;
+    margin: 0;
     list-style-type: none;
   }
 </style>
