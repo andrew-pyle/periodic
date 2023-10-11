@@ -6,3 +6,5 @@ export interface TaskT {
 }
 
 export type TaskStatusT = "did-today" | "up-to-date" | "almost-due" | "overdue";
+
+export type TaskStore = Map<TaskT["id"], TaskT>;

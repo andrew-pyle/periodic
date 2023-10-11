@@ -1,5 +1,5 @@
 import { add } from "date-fns";
-import type { TaskStatusT, TaskT } from "./types";
+import type { TaskStatusT, TaskStore, TaskT } from "./types";
 
 /**
  * Create a new Task ID
@@ -120,6 +120,66 @@ function statusForSecondsLeftInPeriod(
 			} else {
 				return "up-to-date";
 			}
+		}
+	}
+}
+
+/**
+ * Create a set of default tasks to populate the app.
+ */
+export function initializeDefaultTasks(): TaskStore {
+	const [id1, id2, id3, id4] = [id(), id(), id(), id()];
+	return new Map([
+		[
+			id1,
+			{
+				id: id1,
+				name: "Sweep the Kitchen",
+				lastCompleted: new Date(2023, 9, 3).valueOf(),
+				period: "week",
+			},
+		],
+		[
+			id2,
+			{
+				id: id2,
+				name: "Vacuum the Kitchen",
+				lastCompleted: new Date(2023, 8, 9).valueOf(),
+				period: "month",
+			},
+		],
+		[
+			id3,
+			{
+				id: id3,
+				name: "Dust the TV",
+				lastCompleted: null,
+				period: "week",
+			},
+		],
+		[
+			id4,
+			{
+				id: id4,
+				name: "Mop Entryway",
+				lastCompleted: new Date(2023, 9, 4).valueOf(),
+				period: "week",
+			},
+		],
+	]);
+}
+
+/**
+ * Opt-in to persistent storage for the origin, globally.
+ */
+export async function requestStoragePersistence() {
+	if (window.navigator.storage?.persist) {
+		const isPersisted = await window.navigator.storage.persisted();
+		console.log(`Persistent Storage granted: ${isPersisted}`);
+		if (!isPersisted) {
+			console.log("Requesting Persistent Storage.");
+			const permissionGranted = await window.navigator.storage.persist();
+			console.log(`Persistent Storage granted: ${permissionGranted}`);
 		}
 	}
 }

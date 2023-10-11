@@ -1,53 +1,47 @@
 <script lang="ts">
+  import {
+    createIndexedDBStorage,
+    persist,
+  } from "@macfja/svelte-persistent-store";
+  import { onMount } from "svelte";
   import type { FormEventHandler } from "svelte/elements";
+  import { writable } from "svelte/store";
   import Input from "./lib/Input.svelte";
   import Label from "./lib/Label.svelte";
   import Select from "./lib/Select.svelte";
   import Task from "./lib/Task.svelte";
-  import type { TaskT } from "./lib/types";
-  import { completeActivity, determineTaskStatus, id } from "./lib/utils";
+  import type { TaskStore, TaskT } from "./lib/types";
+  import {
+    completeActivity,
+    determineTaskStatus,
+    id,
+    initializeDefaultTasks,
+    requestStoragePersistence,
+  } from "./lib/utils";
+
+  // Types
 
   let createMode = true;
 
-  const [id1, id2, id3, id4] = [id(), id(), id(), id()];
-  let activities: Map<TaskT["id"], TaskT> = new Map([
-    [
-      id1,
-      {
-        id: id1,
-        name: "Sweep the Kitchen",
-        lastCompleted: new Date(2023, 9, 3).valueOf(),
-        period: "week",
-      },
-    ],
-    [
-      id2,
-      {
-        id: id2,
-        name: "Vacuum the Kitchen",
-        lastCompleted: new Date(2023, 8, 9).valueOf(),
-        period: "month",
-      },
-    ],
-    [
-      id3,
-      {
-        id: id3,
-        name: "Dust the TV",
-        lastCompleted: null,
-        period: "week",
-      },
-    ],
-    [
-      id4,
-      {
-        id: id4,
-        name: "Mop Entryway",
-        lastCompleted: new Date(2023, 9, 4).valueOf(),
-        period: "week",
-      },
-    ],
-  ]);
+  let tasks = persist(
+    writable<TaskStore>(new Map()),
+    createIndexedDBStorage(),
+    "tasks"
+  );
+
+  // Lifecycle
+
+  onMount(async () => {
+    // Opt-in the origin for persistent storage
+    await requestStoragePersistence();
+
+    // Populate Default tasks
+    if ($tasks.size === 0) {
+      $tasks = initializeDefaultTasks();
+    }
+  });
+
+  // Business Logic
 
   /**
    * Create a new Task from a 'Create Task' <form>
@@ -68,16 +62,16 @@
     };
 
     // Update State
-    activities = activities.set(id(), newActivity);
+    $tasks = $tasks.set(id(), newActivity);
   };
 
   function completeTask(id: Task["id"]) {
     // Mutate & Update State
-    const newTasksMap = completeActivity(activities, id);
-    activities = newTasksMap;
+    const newTasksMap = completeActivity($tasks, id);
+    $tasks = newTasksMap;
   }
 
-  $: sortedByLastCompleted = [...activities.values()].sort(
+  $: sortedByLastCompleted = [...$tasks.values()].sort(
     (a, b) => (a.lastCompleted ?? 0) - (b.lastCompleted ?? 0)
   );
 </script>
@@ -126,7 +120,7 @@
             <option value="hour">Hour</option>
             <option value="day">Day</option>
             <option value="week">Week</option>
-            <option value="month">Moth</option>
+            <option value="month">Month</option>
             <option value="year">Year</option>
           </Select>
         </div>
