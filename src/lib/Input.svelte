@@ -1,4 +1,4 @@
-<!-- Adapted from Formation Component Library. S https://formation.fyi/docs/input -->
+<!-- Adapted from Formation Component Library. See https://formation.fyi/docs/input -->
 <script lang="ts">
   export let name: string | undefined = undefined;
   export let id: string | undefined = undefined;
