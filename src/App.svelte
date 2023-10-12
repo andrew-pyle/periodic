@@ -37,11 +37,6 @@
   onMount(async () => {
     // Opt-in the origin for persistent storage
     await requestStoragePersistence();
-
-    // Populate Default tasks
-    if ($tasks.size === 0) {
-      $tasks = initializeDefaultTasks();
-    }
   });
 
   // Business Logic
@@ -65,7 +60,10 @@
     };
 
     // Update State
-    $tasks = $tasks.set(id(), newActivity);
+    $tasks = $tasks.set(newActivity.id, newActivity);
+
+    // Clear Form
+    event.currentTarget.reset();
   };
 
   function completeTask(id: Task["id"]) {
@@ -96,16 +94,25 @@
     $tasks = $tasks.set(task.id, task);
   }
 
+  // Reactive
+
   $: sortedByLastCompleted = [...$tasks.values()].sort(
     (a, b) => (a.lastCompleted ?? 0) - (b.lastCompleted ?? 0)
   );
+
+  // Debug
+  $: {
+    if (import.meta.env.DEV) {
+      console.log("Debug $tasks", $tasks);
+    }
+  }
 </script>
 
 <!-- Todo: Filters for statuses -->
 <main>
   <h1>Done Stuff</h1>
   <ul class="no-bullet">
-    {#each sortedByLastCompleted as task}
+    {#each sortedByLastCompleted as task (task.id)}
       <li>
         <Task
           {task}
@@ -153,6 +160,26 @@
     </form>
   </div>
 </main>
+{#if import.meta.env.DEV}
+  <section class="development-mode-controls">
+    <h2>Development</h2>
+    <div>
+      <!-- Populate Default tasks -->
+      <button
+        type="button"
+        class="button button-intent--warning"
+        on:click={() => ($tasks = initializeDefaultTasks())}
+        >Restore Default Task List</button
+      >
+      <!-- Clear Persisted Store -->
+      <button
+        type="button"
+        class="button button-intent--warning"
+        on:click={() => tasks.delete()}>Delete Task Store</button
+      >
+    </div>
+  </section>
+{/if}
 <footer>
   Made with <a href="https://svelte.dev">Svelte</a> &
   <a href="https://formation.fyi">Formation</a>
@@ -168,7 +195,8 @@
     --color-overdue: currentColor;
   }
 
-  main {
+  main,
+  section {
     display: flex;
     flex-direction: column;
     justify-content: center;
