@@ -12,13 +12,13 @@
   // Possible Statuses of the Task
   const statusMap: { [T in TaskStatusT]: string } = {
     "did-today": "success",
-    "up-to-date": "blank",
+    "up-to-date": "default",
     "almost-due": "warning",
     overdue: "danger",
   };
 </script>
 
-<div class={`card task color--intent-${statusMap[status]}`}>
+<div class={`card task task-layout color--intent-${statusMap[status]}`}>
   <!-- Title -->
   <h2
     class="title"
@@ -78,6 +78,15 @@
 
 <style>
   .task {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+  @media screen and (prefers-color-scheme: dark) {
+    .task {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .task-layout {
     display: grid;
     grid-template-columns: 1fr 1fr minmax(10%, 0.75fr);
     grid-template-areas:
@@ -89,7 +98,7 @@
   }
   /* Only the narrowest screens */
   @media screen and (max-width: 350px) {
-    .task {
+    .task-layout {
       grid-template-columns: 1fr minmax(10%, 0.75fr);
       grid-template-areas:
         "title title"
@@ -101,10 +110,12 @@
 
   .title {
     grid-area: title;
+    padding: 0 2px;
+    border: 1px solid transparent;
   }
 
   .title[contenteditable="true"] {
-    outline: 1px solid currentColor;
+    border-color: currentColor;
     border-radius: 2px;
   }
 

@@ -71,34 +71,54 @@ body {
   background-color: #111418;
 }
 
+/* Adjust position of check mark in Checkbox */
+.checkbox-size--large .checkbox-overlay::after {
+  left: 8px;
+  top: 4px;
+}
+
 /* Utility Classes */
 
-:root {
-  --color-text-muted: #738091; /* Same as Formation ::placeholder */
+.muted {
+  font-weight: 200;
+}
+
+/* Adapted From Formation Color Scheme
+  See https://formation.fyi/docs/colors */
+.color--intent-default {
+  /* color: #111418 !important; */
+  background-color: #e5e8eb !important;
+  border-color: #c1c4c8 !important;
+}
+.color--intent-success {
+  background-color: #238551 !important;
+  border-color: #1c6e42 !important;
+}
+.color--intent-warning {
+  color: white !important;
+  background-color: #c87619 !important;
+  border-color: #935610 !important;
+}
+.color--intent-danger {
+  color: white !important;
+  background-color: #cd4246 !important;
+  border-color: #ac2f33 !important;
 }
 @media screen and (prefers-color-scheme: dark) {
-  :root {
-    --color-text-muted: #abb3bf; /* Same as Formation ::placeholder */
+  .color--intent-default {
+    border-color: #383e47 !important;
+    background-color: #1c2127 !important;
   }
-}
-
-.muted {
-  color: var(--color-text-muted);
-}
-
-/* .color--intent-blank is used, but needs no styles*/
-
-.color--intent-success {
-  background-color: #165a36 !important;
-  border-color: #32a467 !important;
-}
-
-.color--intent-warning {
-  background-color: #77450d !important;
-  border-color: #ec9a3c !important;
-}
-
-.color--intent-danger {
-  background-color: #8e292c !important;
-  border-color: #e76a6e !important;
+  .color--intent-success {
+    background-color: #165a36 !important;
+    border-color: #32a467 !important;
+  }
+  .color--intent-warning {
+    background-color: #77450d !important;
+    border-color: #ec9a3c !important;
+  }
+  .color--intent-danger {
+    background-color: #8e292c !important;
+    border-color: #e76a6e !important;
+  }
 }

@@ -135,7 +135,7 @@ export function initializeDefaultTasks(): TaskStore {
 			{
 				id: id1,
 				name: "Sweep the Kitchen",
-				lastCompleted: new Date(2023, 9, 3).valueOf(),
+				lastCompleted: new Date(2023, 9, 5).valueOf(),
 				period: "week",
 			},
 		],
