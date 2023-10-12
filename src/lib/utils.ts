@@ -137,6 +137,7 @@ export function initializeDefaultTasks(): TaskStore {
 				name: "Sweep the Kitchen",
 				lastCompleted: new Date(2023, 9, 5).valueOf(),
 				period: "week",
+				tags: new Set(["kitchen"]),
 			},
 		],
 		[
@@ -146,6 +147,7 @@ export function initializeDefaultTasks(): TaskStore {
 				name: "Vacuum the Kitchen",
 				lastCompleted: new Date(2023, 8, 9).valueOf(),
 				period: "month",
+				tags: new Set(["kitchen"]),
 			},
 		],
 		[
@@ -155,6 +157,7 @@ export function initializeDefaultTasks(): TaskStore {
 				name: "Dust the TV",
 				lastCompleted: null,
 				period: "week",
+				tags: new Set(["living-room"]),
 			},
 		],
 		[

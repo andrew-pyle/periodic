@@ -25,6 +25,7 @@
   // Types
 
   let editMode = false;
+  let tagFilter = "all";
 
   let tasks = persist(
     writable<TaskStore>(new Map()),
@@ -96,14 +97,19 @@
 
   // Reactive
 
-  $: sortedByLastCompleted = [...$tasks.values()].sort(
-    (a, b) => (a.lastCompleted ?? 0) - (b.lastCompleted ?? 0)
-  );
+  $: sortedByLastCompleted = Array.from($tasks.values())
+    .filter((t) => (tagFilter === "all" ? true : t.tags?.has(tagFilter)))
+    .sort((a, b) => (a.lastCompleted ?? 0) - (b.lastCompleted ?? 0));
+
+  $: tags = Array.from($tasks.values())
+    .map((t) => t.tags ?? new Set<string>())
+    .reduce((tags, next) => new Set([...tags, ...next]), new Set());
 
   // Debug
   $: {
     if (import.meta.env.DEV) {
       console.log("Debug $tasks", $tasks);
+      console.log("Debug tags", tags);
     }
   }
 </script>
@@ -111,6 +117,31 @@
 <!-- Todo: Filters for statuses -->
 <main>
   <h1>Done Stuff</h1>
+  <form class="filter-form">
+    <p class="muted">Filter Tags</p>
+    <label for={`tags-filter-all`}>
+      All
+      <input
+        type="radio"
+        name="tags-filter"
+        id="tags-filter-all"
+        value="all"
+        bind:group={tagFilter}
+      />
+    </label>
+    {#each tags as tag}
+      <label for={`tags-filter-${tag}`}>
+        {tag.replace(/-/g, " ")}
+        <input
+          type="radio"
+          name="tags-filter"
+          id={`tags-filter-${tag}`}
+          value={tag}
+          bind:group={tagFilter}
+        />
+      </label>
+    {/each}
+  </form>
   <ul class="no-bullet">
     {#each sortedByLastCompleted as task (task.id)}
       <li>
@@ -250,6 +281,19 @@
     margin: 0 25px;
     font-size: 22px;
     font-weight: 700;
+  }
+
+  .filter-form {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .filter-form label {
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
   }
 
   /* Utility Classes */

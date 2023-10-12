@@ -3,6 +3,7 @@ export interface TaskT {
 	name: string;
 	lastCompleted: null | number; // millisecond time
 	period: "hour" | "day" | "week" | "month" | "year";
+	tags?: Set<string>;
 }
 
 export type TaskStatusT = "did-today" | "up-to-date" | "almost-due" | "overdue";
