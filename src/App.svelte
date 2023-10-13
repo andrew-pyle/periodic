@@ -231,11 +231,4 @@
     align-items: center;
     gap: 10px;
   }
-
-  /* Utility Classes */
-  .no-bullet {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-  }
 </style>

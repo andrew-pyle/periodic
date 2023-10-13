@@ -91,6 +91,12 @@ body {
   text-transform: capitalize;
 }
 
+.no-bullet {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
 /* Adapted From Formation Color Scheme
   See https://formation.fyi/docs/colors */
 .color--intent-default {
