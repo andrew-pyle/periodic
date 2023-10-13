@@ -37,6 +37,7 @@ body {
 
 /* Changes to Formation */
 
+/* Add Light Mode Focus state to inputs & select */
 .theme-light .input:focus,
 .theme-light .input:focus-within,
 .theme-light .select:focus,
@@ -44,7 +45,7 @@ body {
 .theme-light .button:focus {
   box-shadow: none;
   border-color: #215db0;
-  box-shadow: 0 0 0 2px #8abbff;
+  box-shadow: 0 0 0 4px #8abbff;
   outline: none;
 }
 .theme-light .input:focus,
@@ -54,6 +55,7 @@ body {
   background-color: #ffffff;
 }
 
+/* Add Dark Mode Focus state to inputs & select */
 .theme-dark .input:focus,
 .theme-dark .input:focus-within,
 .theme-dark .select:focus,
@@ -61,7 +63,7 @@ body {
 .theme-dark .button:focus {
   box-shadow: none;
   border-color: #8abbff;
-  box-shadow: 0 0 0 2px #184a90;
+  box-shadow: 0 0 0 4px #184a90;
   outline: none;
 }
 .theme-dark .input:focus,
@@ -71,16 +73,22 @@ body {
   background-color: #111418;
 }
 
-/* Adjust position of check mark in Checkbox */
-.checkbox-size--large .checkbox-overlay::after {
-  left: 8px;
-  top: 4px;
+/* Restore box-sizing: content-box for some Formation Components */
+.radio-overlay,
+.radio-overlay::after,
+.checkbox-overlay,
+.checkbox-overlay::after {
+  box-sizing: content-box;
 }
 
 /* Utility Classes */
 
 .muted {
   font-weight: 200;
+}
+
+.capitalize {
+  text-transform: capitalize;
 }
 
 /* Adapted From Formation Color Scheme
