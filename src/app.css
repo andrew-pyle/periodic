@@ -37,7 +37,8 @@ body {
 
 /* Changes to Formation */
 
-/* Add Light Mode Focus state to inputs & select */
+/* Add Light Mode Focus state to inputs & select.
+   Adapted from Formation. See https://formation.fyi/ */
 .theme-light .input:focus,
 .theme-light .input:focus-within,
 .theme-light .select:focus,
@@ -55,7 +56,8 @@ body {
   background-color: #ffffff;
 }
 
-/* Add Dark Mode Focus state to inputs & select */
+/* Add Dark Mode Focus state to inputs & select.
+   Adapted from Formation. See https://formation.fyi/ */
 .theme-dark .input:focus,
 .theme-dark .input:focus-within,
 .theme-dark .select:focus,
