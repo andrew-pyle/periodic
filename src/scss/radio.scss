@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// Source: https://github.com/joshdschneider/formation/blob/main/src/components/Checkbox/_checkbox.scss
+// Source: https://github.com/joshdschneider/formation/blob/main/src/components/Radio/_radio.scss
 
 @import "./themes";
 
@@ -51,7 +51,7 @@ $themes: (
   ),
 );
 
-.checkbox-container {
+.radio-container {
   display: inline-flex;
   justify-content: flex-start;
   align-items: center;
@@ -61,7 +61,7 @@ $themes: (
   min-height: 20px;
 }
 
-.checkbox {
+.radio {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -69,30 +69,30 @@ $themes: (
   width: 0;
   transition: $default-transition;
 
-  &:checked + .checkbox-overlay {
+  &:checked + .radio-overlay {
     @include themify($themes) {
       background-color: themed("background-color--checked");
       border-color: themed("border-color--checked");
     }
   }
 
-  &:checked + .checkbox-overlay:hover {
+  &:checked + .radio-overlay:hover {
     @include themify($themes) {
       background-color: themed("background-color--checked--hover");
     }
   }
 
-  &:checked + .checkbox-overlay:active {
+  &:checked + .radio-overlay:active {
     @include themify($themes) {
       background-color: themed("background-color--checked--active");
     }
   }
 
-  &:checked + .checkbox-overlay:after {
+  &:checked + .radio-overlay:after {
     display: block;
   }
 
-  &:disabled + .checkbox-overlay {
+  &:disabled + .radio-overlay {
     cursor: not-allowed;
 
     @include themify($themes) {
@@ -101,14 +101,14 @@ $themes: (
   }
 
   &:checked {
-    &:disabled + .checkbox-overlay {
+    &:disabled + .radio-overlay {
       @include themify($themes) {
         background-color: themed("background-color--checked--active");
         border-color: themed("background-color--checked--active");
       }
     }
 
-    &:disabled + .checkbox-overlay:after {
+    &:disabled + .radio-overlay:after {
       @include themify($themes) {
         border-color: rgba(255, 255, 255, 0.5);
       }
@@ -116,14 +116,14 @@ $themes: (
   }
 }
 
-.checkbox-overlay {
+.radio-overlay {
   position: absolute;
   top: 0;
   left: 0;
   height: 18px;
   width: 18px;
   border: 1px solid;
-  border-radius: 4px;
+  border-radius: 50%;
   transition: $default-transition;
 
   @include themify($themes) {
@@ -148,38 +148,34 @@ $themes: (
     position: absolute;
     display: none;
     left: 6px;
-    top: 3px;
-    width: 4px;
-    height: 8px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
+    top: 6px;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
     transition: $default-transition;
   }
 }
 
-.checkbox-size--large {
+.radio-size--large {
   min-height: 24px;
   padding-left: 24px;
 
-  .checkbox-overlay {
+  .radio-overlay {
     height: 22px;
     width: 22px;
-    border-radius: 6px;
+    border-radius: 50%;
 
     &:after {
       left: 7px;
-      top: 3px;
-      width: 5px;
-      height: 10px;
-      border-width: 0 3px 3px 0;
+      top: 7px;
+      width: 8px;
+      height: 8px;
     }
   }
 }
 
-.checkbox-label {
+.radio-label {
   display: inline-flex;
   justify-content: flex-start;
   align-items: center;
