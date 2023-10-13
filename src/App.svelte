@@ -62,7 +62,7 @@
   }
 
   /**
-   * TODO: Delete doesn't work. Maybe IDs aren't stable?
+   * Remove a Task from the App
    */
   function deleteTask(id: TaskT["id"]) {
     // Delete ID from Task Map
@@ -75,12 +75,11 @@
   }
 
   /**
-   * TODO: Doesn't work. Sometimes clones existing items.
-   * Maybe IDs aren't stable?
+   * Update the fields of a Task by ID
    */
-  function editTask(task: TaskT) {
-    console.log(task);
-    $tasks = $tasks.set(task.id, task);
+  function editTask(id: TaskT["id"], task: TaskT) {
+    const { id: _id, ...payload } = task; // Ignore id from task object
+    $tasks = $tasks.set(id, { id, ...payload });
   }
 
   // Reactive
@@ -123,6 +122,7 @@
         checked={tagFilter === tag}
         on:input={updateTagFilter}
       >
+        <!-- Replace hyphens with spaces -->
         {tag.replace(/-/g, " ")}
       </Radio>
     {/each}

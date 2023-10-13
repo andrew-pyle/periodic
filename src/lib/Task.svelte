@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { FormEventHandler } from "svelte/elements";
   import type { TaskStatusT, TaskT } from "./types";
   import { lastCompletedFormatter } from "./utils";
 
@@ -7,7 +8,7 @@
   export let editMode: boolean;
   export let onComplete: (id: TaskT["id"]) => void;
   export let onDelete: (id: TaskT["id"]) => void;
-  export let onEdit: (task: TaskT) => void;
+  export let onEdit: (id: TaskT["id"], task: TaskT) => void;
 
   // Possible Statuses of the Task
   const statusMap: { [T in TaskStatusT]: string } = {
@@ -16,16 +17,27 @@
     "almost-due": "warning",
     overdue: "danger",
   };
+
+  const editName: FormEventHandler<HTMLHeadingElement> = (event) => {
+    const newTaskData = {
+      ...task,
+      name: event.currentTarget.textContent ?? "",
+    };
+    onEdit(task.id, newTaskData);
+  };
+
+  const editPeriod: FormEventHandler<HTMLSelectElement> = (event) => {
+    const newTaskData = {
+      ...task,
+      period: event.currentTarget.value as TaskT["period"],
+    };
+    onEdit(task.id, newTaskData);
+  };
 </script>
 
 <div class={`card task task-layout color--intent-${statusMap[status]}`}>
   <!-- Title -->
-  <h2
-    class="title"
-    contenteditable={editMode}
-    on:input={(event) =>
-      onEdit({ ...task, name: event.currentTarget.textContent ?? "" })}
-  >
+  <h2 class="title" contenteditable={editMode} on:input={editName}>
     {task.name}
   </h2>
 
@@ -43,12 +55,7 @@
   <p class="key-value">
     <span class="muted">Due&nbsp;Every</span>
     {#if editMode}
-      <select
-        class="edit-period"
-        value={task.period}
-        on:input={(event) =>
-          onEdit({ ...task, period: event.currentTarget.value })}
-      >
+      <select class="edit-period" value={task.period} on:input={editPeriod}>
         <option value="hour">Hour</option>
         <option value="day">Day</option>
         <option value="week">Week</option>
