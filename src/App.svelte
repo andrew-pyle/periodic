@@ -103,7 +103,7 @@
 
 <!-- Todo: Filters for statuses -->
 <main>
-  <h1>Done Stuff</h1>
+  <h1 class="main-heading">Periodic</h1>
 
   <div class="filter-form capitalize">
     <p class="muted">Filter Tags</p>
@@ -208,6 +208,10 @@
 
   hr {
     margin: 1em 0;
+  }
+
+  .main-heading {
+    margin-bottom: 1em;
   }
 
   .form-container {

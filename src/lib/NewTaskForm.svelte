@@ -36,7 +36,7 @@
 
 <form class="create-form" on:submit|preventDefault={handleSubmit}>
   <div class="label-group">
-    <Label htmlFor="create-activity">Task Name</Label>
+    <Label htmlFor="create-activity">Name</Label>
     <Input
       id="create-activity"
       name="create-activity"
@@ -53,11 +53,25 @@
       <option value="year">Year</option>
     </Select>
   </div>
-  <p>Tags input how?</p>
+  <!-- <div class="label-group">
+    <Label htmlFor="create-activity-tags">Tags</Label>
+    <Input
+      id="create-activity-tags"
+      name="create-activity-tags"
+      placeholder="Chores"
+    />
+  </div> -->
+
   <button type="submit" class="button button-intent--primary"
     >Create Task</button
   >
 </form>
+
+<!-- <ul class="create-form no-bullet">
+  <li>Chores</li>
+  <li>Schoolwork</li>
+  <li>Cooking</li>
+</ul> -->
 
 <style>
   .create-form {
